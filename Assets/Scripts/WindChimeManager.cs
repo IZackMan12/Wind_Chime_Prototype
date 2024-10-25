@@ -5,6 +5,12 @@ public class WindChimeManager : MonoBehaviour
     public static List<GameObject> windChimes = new List<GameObject>();
     [SerializeField]public static List<Vector3> allChimePositions = new List<Vector3>();
     public static float moveSpeed = 5.0f; // Adjust the speed for smoother movement
+    public static AudioSource chimeSwapSFX;
+
+    private void Start()
+    {
+        chimeSwapSFX = GetComponent<AudioSource>();
+    }
 
     // Register a wind chime at a specific index to maintain correct order
 
@@ -51,6 +57,11 @@ public class WindChimeManager : MonoBehaviour
             windChimes.Remove(draggedChime);
             windChimes.Insert(closestIndex, draggedChime);
 
+            if (chimeSwapSFX.isPlaying == false)
+            {
+                chimeSwapSFX.Play();
+            }
+
             // Reset positions of all other chimes according to the updated list
             ResetChimesPositions();
         }
@@ -73,6 +84,7 @@ public class WindChimeManager : MonoBehaviour
     public static void ResetChimesPositions()
     {
         // Reset all chimes back to their designated X positions, keeping Y and Z unchanged
+
         for (int i = 0; i < windChimes.Count; i++)
         {
             Vector3 targetPosition = allChimePositions[i];
